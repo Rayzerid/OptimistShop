@@ -1,0 +1,131 @@
+﻿<ui:UiWindow
+    x:Class="OptimistShop.Views.Windows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:OptimistShop.Views.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:OptimistShop.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
+    Width="1000"
+    Height="580"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    d:DataContext="{d:DesignInstance local:MainWindow,
+                                     IsDesignTimeCreatable=True}"
+    ExtendsContentIntoTitleBar="True"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    ResizeMode="NoResize"
+    WindowBackdropType="Unknown"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ui:TitleBar
+            Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
+            Grid.Row="0"
+            Height="60"
+            CanMaximize="False"
+            FontSize="16"
+            FontWeight="Black"
+            Icon="pack://application:,,,/Assets/applicationIcon-256.png"
+            ShowMaximize="False"
+            UseSnapLayout="True">
+            <ui:TitleBar.Tray>
+                <ui:NotifyIcon Icon="pack://application:,,,/Assets/applicationIcon-256.png" />
+            </ui:TitleBar.Tray>
+        </ui:TitleBar>
+
+        <StackPanel
+            Margin="0,0,130,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <Grid>
+                <ui:Button
+                    Grid.Row="0"
+                    Background="{DynamicResource ApplicationBackgroundBrush}"
+                    BorderBrush="Transparent"
+                    Command="{Binding ViewModel.OpenCartCommand}"
+                    Cursor="Hand"
+                    FontSize="34"
+                    Icon="Cart16"
+                    IconFilled="{Binding ViewModel.IsCartFilled}"
+                    ToolTip="Корзина"
+                    ToolTipService.InitialShowDelay="1"
+                    Visibility="{Binding ViewModel.CartVisibility}" />
+                <ui:Badge
+                    Width="auto"
+                    Height="auto"
+                    Margin="0,2,10,0"
+                    Padding="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Appearance="Danger"
+                    Visibility="{Binding ViewModel.BadgeVisibility}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        Text="{Binding ViewModel.BadgeValue}" />
+                </ui:Badge>
+            </Grid>
+
+
+            <Grid
+                Grid.Row="0"
+                Width="60"
+                Height="50"
+                Margin="10,0,0,0">
+                <ui:Button
+                    Background="{DynamicResource ApplicationBackgroundBrush}"
+                    BorderBrush="Transparent"
+                    Command="{Binding ViewModel.OpenLoginGridCommand}"
+                    Cursor="Hand"
+                    ToolTip="Вход"
+                    ToolTipService.InitialShowDelay="1"
+                    Visibility="{Binding ViewModel.IsLoginBtnVisible}">
+                    <ui:SymbolIcon
+                        Margin="0,3,0,0"
+                        Filled="{Binding ViewModel.IsLoginFilled}"
+                        FontSize="32"
+                        Symbol="Person16" />
+                </ui:Button>
+                <ui:Button
+                    Background="{DynamicResource ApplicationBackgroundBrush}"
+                    BorderBrush="Transparent"
+                    Command="{Binding ViewModel.LogoutCommand}"
+                    Cursor="Hand"
+                    ToolTip="Выйти"
+                    ToolTipService.InitialShowDelay="1"
+                    Visibility="{Binding ViewModel.IsLogoutBtnVisible}">
+                    <ui:SymbolIcon
+                        Margin="0,3,0,0"
+                        FontSize="32"
+                        Symbol="ArrowExit20" />
+                </ui:Button>
+            </Grid>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ui:NavigationStore
+                x:Name="RootNavigation"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Frame="{Binding ElementName=RootFrame, Mode=OneWay}"
+                Items="{Binding ViewModel.NavigationItems, Mode=TwoWay}" />
+            <Frame x:Name="RootFrame" Grid.Column="1" />
+        </Grid>
+    </Grid>
+</ui:UiWindow>

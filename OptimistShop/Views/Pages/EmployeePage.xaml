@@ -1,0 +1,245 @@
+﻿<ui:UiPage
+    x:Class="OptimistShop.Views.Pages.EmployeePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:cnvs="clr-namespace:OptimistShop.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:OptimistShop.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:OptimistShop.Models.DbTables"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Сотрудник"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    d:DataContext="{d:DesignInstance local:EmployeePage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="520"
+    d:DesignWidth="940"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+    <ui:UiPage.Resources>
+        <cnvs:MultiValueConverter x:Key="MultiValueConverter" />
+        <cnvs:IsPaidToIndexConverter x:Key="IsPaidToIndexConverter" />
+        <cnvs:OrderStatusToIndexConverter x:Key="OrderStatusToIndexConverter" />
+    </ui:UiPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.RowSpan="2"
+            Width="auto"
+            Margin="0,10,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="35"
+            FontWeight="Medium"
+            Foreground="#FF8C8686"
+            Text="{Binding ViewModel.EmptyText}"
+            TextWrapping="Wrap"
+            Visibility="{Binding ViewModel.EmptyOrderVisibility}" />
+        <StackPanel
+            Margin="0,0,20,0"
+            HorizontalAlignment="Center"
+            IsEnabled="{Binding ViewModel.InterfaceIsEnabled}"
+            Orientation="Horizontal">
+            <ui:Button
+                Height="35"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Center"
+                BorderBrush="#188851"
+                BorderThickness="1.5"
+                Command="{Binding ViewModel.GetAllOrdersCommand}"
+                Content="Все заказы"
+                Cursor="Hand"
+                FontSize="15"
+                FontWeight="SemiBold"
+                Foreground="#188851"
+                MouseOverBackground="Transparent"
+                MouseOverBorderBrush="#2da66a"
+                PressedBackground="Transparent"
+                PressedBorderBrush="#2da66a"
+                PressedForeground="#2da66a" />
+            <ui:Button
+                Height="35"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Center"
+                BorderBrush="#188851"
+                BorderThickness="1.5"
+                Command="{Binding ViewModel.GetTodayOrdersCommand}"
+                Content="Заказы за сегодня"
+                Cursor="Hand"
+                FontSize="15"
+                FontWeight="SemiBold"
+                Foreground="#188851"
+                MouseOverBackground="Transparent"
+                MouseOverBorderBrush="#2da66a"
+                PressedBackground="Transparent"
+                PressedBorderBrush="#2da66a"
+                PressedForeground="#2da66a" />
+            <StackPanel Margin="10,0,0,0" VerticalAlignment="Top">
+                <Label Content="Поиск по ID клиента" />
+                <ui:TextBox
+                    MinHeight="35"
+                    MaxLength="7"
+                    PlaceholderText="ID клиента"
+                    PreviewTextInput="CheckNums"
+                    Text="{Binding ViewModel.UserIDText, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.IDTextChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:EmployeePage}}}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ui:TextBox>
+            </StackPanel>
+        </StackPanel>
+
+        <ListView
+            Grid.Row="1"
+            IsEnabled="{Binding ViewModel.InterfaceIsEnabled}"
+            ItemsSource="{Binding ViewModel.OrderItems}"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.ScrollUnit="Pixel">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Height="80"
+                        BorderBrush="LightGray"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="125" />
+                                <ColumnDefinition Width="175" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="ID заказа" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="{Binding OrderID, StringFormat=#{0}}" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="Дата заказа" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="{Binding OrderDate, StringFormat={}{0:dd.MM.yyyy}}" />
+                            </StackPanel>
+
+
+                            <StackPanel
+                                Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="ID клиента" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="{Binding User.UserID}" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="Имя клиента" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="{Binding User.UserName}" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="Сумма заказа" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="Black"
+                                    Text="{Binding OrderTotal, StringFormat={}{0} ₽}" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="5"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="Оплачен" />
+                                <ComboBox
+                                    x:Name="IsPaidCB"
+                                    Width="100"
+                                    SelectedIndex="{Binding IsPaid, Converter={StaticResource IsPaidToIndexConverter}}">
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding ViewModel.IsPaidChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:EmployeePage}}}">
+                                                <i:InvokeCommandAction.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                        <Binding Path="OrderID" />
+                                                        <Binding ElementName="IsPaidCB" Path="SelectedValue" />
+                                                    </MultiBinding>
+                                                </i:InvokeCommandAction.CommandParameter>
+                                            </i:InvokeCommandAction>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                    <ComboBoxItem Content="Да" />
+                                    <ComboBoxItem Content="Нет" />
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Label Content="Статус заказа" />
+                                <ComboBox
+                                    x:Name="StatusCB"
+                                    Width="150"
+                                    SelectedIndex="{Binding OrderStatus, Converter={StaticResource OrderStatusToIndexConverter}}">
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding ViewModel.StatusChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:EmployeePage}}}">
+                                                <i:InvokeCommandAction.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                        <Binding Path="OrderID" />
+                                                        <Binding ElementName="StatusCB" Path="SelectedValue" />
+                                                    </MultiBinding>
+                                                </i:InvokeCommandAction.CommandParameter>
+                                            </i:InvokeCommandAction>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                    <ComboBoxItem Content="Подтвержден" />
+                                    <ComboBoxItem Content="Готовится" />
+                                    <ComboBoxItem Content="Готов к выдаче" />
+                                    <ComboBoxItem Content="Получен" />
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ui:ProgressRing
+            Grid.RowSpan="2"
+            IsIndeterminate="True"
+            Visibility="{Binding ViewModel.ProgressRingVisibility}" />
+    </Grid>
+</ui:UiPage>

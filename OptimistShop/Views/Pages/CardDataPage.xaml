@@ -1,0 +1,160 @@
+﻿<ui:UiPage
+    x:Class="OptimistShop.Views.Pages.CardDataPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:OptimistShop.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:OptimistShop.Models.DbTables"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="Карта"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    d:DataContext="{d:DesignInstance local:CardDataPage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="520"
+    d:DesignWidth="940"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel
+            Width="400"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Grid
+                Width="400"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <Border
+                    Width="320"
+                    Height="200"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Right"
+                    Background="LightGray"
+                    CornerRadius="15">
+                    <Grid>
+                        <Border
+                            Height="40"
+                            Margin="0,61,0,0"
+                            VerticalAlignment="Top"
+                            Background="Gray" />
+                        <ui:PasswordBox
+                            x:Name="CvvPB"
+                            MinWidth="50"
+                            Margin="0,0,13,40"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Background="White"
+                            BorderThickness="0"
+                            ClearButtonEnabled="False"
+                            FontSize="18"
+                            FontWeight="Regular"
+                            MaxLength="3"
+                            PasswordChanged="PasswordBox_PasswordChanged"
+                            PasswordChar="•"
+                            PlaceholderText="CVV"
+                            PreviewTextInput="CheckNums"
+                            RevealButtonEnabled="False"
+                            TextAlignment="Center" />
+                    </Grid>
+
+                </Border>
+                <Border
+                    Width="320"
+                    Height="200"
+                    HorizontalAlignment="Left"
+                    Background="White"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left"
+                            Source="/Assets/pay-card.png" />
+                        <wpfx:MaskedTextBox
+                            Grid.Row="1"
+                            Margin="6,0,6,0"
+                            Background="#ededed"
+                            BorderThickness="0"
+                            FontSize="20"
+                            FontWeight="Regular"
+                            Mask="0000 0000 0000 0000"
+                            PreviewTextInput="CheckNums"
+                            Style="{StaticResource DefaultTextBoxStyle}"
+                            Text="{Binding ViewModel.CardNumber, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel
+                            Grid.Row="3"
+                            Margin="6,0,0,15"
+                            Orientation="Horizontal">
+                            <ui:TextBox
+                                MinWidth="50"
+                                Margin="0,0,10,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#ededed"
+                                BorderThickness="0"
+                                ClearButtonEnabled="False"
+                                FontSize="18"
+                                FontWeight="Regular"
+                                MaxLength="2"
+                                PlaceholderText="ММ"
+                                PreviewTextInput="CheckNums"
+                                Text="{Binding ViewModel.Month, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="17"
+                                Text="/" />
+                            <ui:TextBox
+                                MinWidth="50"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#ededed"
+                                BorderThickness="0"
+                                ClearButtonEnabled="False"
+                                FontSize="18"
+                                FontWeight="Regular"
+                                MaxLength="2"
+                                PlaceholderText="ГГ"
+                                PreviewTextInput="CheckNums"
+                                Text="{Binding ViewModel.Year, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <ui:Button
+                Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Width="260"
+                Height="40"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#188851"
+                BorderBrush="#188851"
+                Command="{Binding ViewModel.ConfirmCommand}"
+                CommandParameter="{Binding ElementName=CvvPB}"
+                Content="Подтвердить"
+                Cursor="Hand"
+                FontWeight="SemiBold"
+                Foreground="White"
+                MouseOverBackground="#2da66a"
+                MouseOverBorderBrush="#2da66a"
+                PressedBackground="#2da66a"
+                PressedBorderBrush="#2da66a"
+                PressedForeground="LightGray" />
+        </StackPanel>
+    </Grid>
+</ui:UiPage>

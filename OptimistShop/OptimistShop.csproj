@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>aplicationicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="aplicationicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CalcBinding" Version="2.5.2" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="WPF-UI" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\applicationIcon-1024.png" />
+    <None Remove="Assets\applicationIcon-256.png" />
+    <None Remove="Assets\backgroundhome.png" />
+    <None Remove="Assets\login.png" />
+    <None Remove="Assets\pay-card.png" />
+    <None Remove="Assets\registration.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\applicationIcon-1024.png" />
+    <Resource Include="Assets\applicationIcon-256.png" />
+    <Resource Include="Assets\backgroundhome.png" />
+    <Resource Include="Assets\login.png" />
+    <Resource Include="Assets\pay-card.png" />
+    <Resource Include="Assets\registration.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
