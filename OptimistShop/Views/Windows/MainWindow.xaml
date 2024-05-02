@@ -119,10 +119,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ui:NavigationStore
+            <ui:NavigationCompact
                 x:Name="RootNavigation"
                 Grid.Column="0"
-                VerticalAlignment="Center"
                 Frame="{Binding ElementName=RootFrame, Mode=OneWay}"
                 Items="{Binding ViewModel.NavigationItems, Mode=TwoWay}" />
             <Frame x:Name="RootFrame" Grid.Column="1" />

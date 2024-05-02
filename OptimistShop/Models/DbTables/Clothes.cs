@@ -14,7 +14,6 @@ namespace OptimistShop.Models.DbTables
         public int ClothesID { get; set; }
         public string? ClothesName { get; set; }
         public int ClothesPrice { get; set; }
-        public string? ClothesDescription { get; set; }
         public string? ClothesType { get; set; }
         public string? ClothesCategory { get; set; }
         public byte[]? ClothesImage { get; set; }

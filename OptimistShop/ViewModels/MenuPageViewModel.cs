@@ -31,7 +31,19 @@ namespace OptimistShop.ViewModels
         private string? _searchText;
 
         [ObservableProperty]
+        private string _selectedCategory;
+
+        [ObservableProperty]
+        private string _selectedType;
+
+        [ObservableProperty]
         private string _snackbarMessage;
+
+        [ObservableProperty]
+        private ObservableCollection<string> _clothesType;
+
+        [ObservableProperty]
+        private ObservableCollection<string> _clothesCategory;
 
         [ObservableProperty]
         private string _snackbarAppearance;
@@ -61,6 +73,22 @@ namespace OptimistShop.ViewModels
                 _dbContext = await Task.Run(() => new StoreDbContext());
 
                 CatalogItemsMain = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.ToList()));
+
+                ClothesCategory = new ObservableCollection<string>()
+                {
+                    "Верхняя одежда",
+                    "Нижняя одежда",
+                    "Обувь",
+                    "Головные уборы",
+                    "Cбросить"
+                };
+
+                ClothesType = new ObservableCollection<string>()
+                {
+                    "Мужская",
+                    "Женская",
+                    "Сбросить"
+                };
             }
             catch (Exception ex)
             {
@@ -96,7 +124,7 @@ namespace OptimistShop.ViewModels
                 {
                     BtnAddIsHitTestVisible = false;
                     SnackbarMessage = "Товар успешно добавлен в корзину";
-                    SnackbarAppearance = "Success";
+                    SnackbarAppearance = "Dark";
 
                     Clothes SelectedClothesModel = CatalogItemsSecondary.FirstOrDefault(x => x.ClothesName == parameter);
 
@@ -133,7 +161,7 @@ namespace OptimistShop.ViewModels
                         if(foodContain.Count == 5)
                         {
                             SnackbarMessage = "Достигнут лимит количества в корзине для этого товара";
-                            SnackbarAppearance = "Danger";
+                            SnackbarAppearance = "Dark";
                         }
                         else
                         {
@@ -149,7 +177,7 @@ namespace OptimistShop.ViewModels
                 else
                 {
                     SnackbarMessage = "Войдите в аккаунт";
-                    SnackbarAppearance = "Danger";
+                    SnackbarAppearance = "Dark";
                     return;
                 }
             }
@@ -162,87 +190,69 @@ namespace OptimistShop.ViewModels
 
 
         [RelayCommand]
-        private async void CategoryFilterButtonClick(string? parameter)
+        private async void CategoryFilter()
         {
             try
             {
-                ProgressRingVisibility = Visibility.Visible;
-                CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesCategory == parameter)));
-                ProgressRingVisibility = Visibility.Hidden;
+                if (SelectedCategory == "Cбросить")
+                {
+                    ProgressRingVisibility = Visibility.Visible;
+                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.ToList()));
+                    ProgressRingVisibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ProgressRingVisibility = Visibility.Visible;
+                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesCategory == SelectedCategory)));
+                    ProgressRingVisibility = Visibility.Hidden;
+                }
+                
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
 
         [RelayCommand]
-        private async void StatusFilterButtonClick(string? parameter)
+        private async void TypeFilter()
         {
             try
             {
-                /*ProgressRingVisibility = Visibility.Visible;
-                MenuItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesStatus == parameter)));
-                ProgressRingVisibility = Visibility.Hidden;*/
+                if (SelectedType == "Сбросить")
+                {
+                    ProgressRingVisibility = Visibility.Visible;
+                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.ToList()));
+                    ProgressRingVisibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ProgressRingVisibility = Visibility.Visible;
+                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesType == ParseType(SelectedType))));
+                    ProgressRingVisibility = Visibility.Hidden;
+                }
+
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
 
-        [RelayCommand]
-        private async void PriceFilterButtonClick(string? parameter)
+        private string ParseType(string category)
         {
-            try
-            {
-                parameter = parameter.Replace(" ₽", "");
-                string[] strSplit = parameter.Split(" - ");
+            string result = string.Empty;
+            if (category == "Мужская")
+                result = "Муж";
+            else
+            if (category == "Женская")
+                result = "Жен";
+            else
+                result = category;
 
-                ProgressRingVisibility = Visibility.Visible;
-                CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesPrice >= int.Parse(strSplit[0]) && x.ClothesPrice <= int.Parse(strSplit[1]))));
-                ProgressRingVisibility = Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }      
-        }
-
-        [RelayCommand]
-        private async void TypeFilterButtonClick(string? parameter)
-        {
-            try
-            {
-                ProgressRingVisibility = Visibility.Visible;
-                CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesType == parameter)));
-                ProgressRingVisibility = Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-        }
-
-        [RelayCommand]
-        private async void ClearFilters(string? parameter)
-        {
-            try
-            {
-                ProgressRingVisibility = Visibility.Visible;
-                CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes));
-                ProgressRingVisibility = Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
+            return result;
         }
     }
 }
