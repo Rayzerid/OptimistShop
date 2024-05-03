@@ -119,7 +119,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ui:NavigationCompact
+            <ui:NavigationStore
                 x:Name="RootNavigation"
                 Grid.Column="0"
                 Frame="{Binding ElementName=RootFrame, Mode=OneWay}"

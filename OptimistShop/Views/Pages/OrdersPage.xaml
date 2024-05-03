@@ -262,21 +262,21 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="35"
-                FontWeight="Medium"
+                FontWeight="Bold"
                 Foreground="#FF8C8686"
-                Text="У вас пока нет заказов"
+                Text="Вы пока ничего не заказывали"
                 TextWrapping="Wrap" />
             <Button
                 Margin="0,15,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                BorderBrush="#188851"
+                BorderBrush="Black"
                 BorderThickness="1.5"
                 Command="{Binding ViewModel.GoToMenuCommand}"
-                Content="Открыть меню"
+                Content="Открыть каталог"
                 FontSize="16"
-                FontWeight="SemiBold"
-                Foreground="#188851"
+                FontWeight="Bold"
+                Foreground="Gray"
                 Style="{StaticResource ToolBarButtonBaseStyle}" />
         </StackPanel>
     </Grid>

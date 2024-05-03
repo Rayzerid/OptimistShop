@@ -77,7 +77,7 @@
                                 <Image
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Source="{Binding Food.FoodImage}"
+                                    Source="{Binding Clothes.ClothesImage}"
                                     Stretch="Uniform">
                                     <Image.Effect>
                                         <DropShadowEffect
@@ -98,14 +98,14 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     Foreground="Black"
-                                    Text="{Binding Food.FoodName}" />
+                                    Text="{Binding Clothes.ClothesName}" />
                                 <TextBlock
                                     Margin="0,7,0,0"
                                     FontSize="13"
                                     Foreground="#FF756868">
-                                    <Run Text="{Binding Food.FoodType}" />
+                                    <Run Text="{Binding Clothes.ClothesType}" />
                                     <Run Text=" | " />
-                                    <Run Text="{Binding Food.FoodCategory}" />
+                                    <Run Text="{Binding Clothes.ClothesCategory}" />
                                 </TextBlock>
                             </StackPanel>
 
@@ -118,7 +118,7 @@
                                 Foreground="Black">
                                 <Run Text="{Binding Count}" />
                                 <Run Text="x" />
-                                <Run Text="{Binding Food.FoodPrice, StringFormat={}{0} ₽}" />
+                                <Run Text="{Binding Clothes.ClothesPrice, StringFormat={}{0} ₽}" />
                             </TextBlock>
                         </StackPanel>
                     </Border>

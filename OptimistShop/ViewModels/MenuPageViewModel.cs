@@ -15,6 +15,7 @@ namespace OptimistShop.ViewModels
     {
         private StoreDbContext _dbContext;
         private MainWindowViewModel _mainWindowViewModel;
+        private LoginPageViewModel _loginViewModel;
         private bool _isInitialized = false;
 
         [ObservableProperty]
@@ -29,6 +30,12 @@ namespace OptimistShop.ViewModels
 
         [ObservableProperty]
         private string? _searchText;
+
+        [ObservableProperty]
+        private int _indexCategory;
+
+        [ObservableProperty]
+        private int _indexType;
 
         [ObservableProperty]
         private string _selectedCategory;
@@ -69,6 +76,7 @@ namespace OptimistShop.ViewModels
             try
             {
                 _mainWindowViewModel = App.GetService<MainWindowViewModel>();
+                _loginViewModel = App.GetService<LoginPageViewModel>();
 
                 _dbContext = await Task.Run(() => new StoreDbContext());
 
@@ -79,15 +87,13 @@ namespace OptimistShop.ViewModels
                     "Верхняя одежда",
                     "Нижняя одежда",
                     "Обувь",
-                    "Головные уборы",
-                    "Cбросить"
+                    "Головные уборы"
                 };
 
                 ClothesType = new ObservableCollection<string>()
                 {
                     "Мужская",
-                    "Женская",
-                    "Сбросить"
+                    "Женская"
                 };
             }
             catch (Exception ex)
@@ -116,7 +122,7 @@ namespace OptimistShop.ViewModels
 
 
         [RelayCommand]
-        private async void ToCartClick(string? parameter)
+        private async void ToCartClick(int? parameter)
         {
             try
             {
@@ -126,21 +132,21 @@ namespace OptimistShop.ViewModels
                     SnackbarMessage = "Товар успешно добавлен в корзину";
                     SnackbarAppearance = "Dark";
 
-                    Clothes SelectedClothesModel = CatalogItemsSecondary.FirstOrDefault(x => x.ClothesName == parameter);
+                    Clothes SelectedClothesModel = CatalogItemsSecondary.FirstOrDefault(x => x.ClothesID == parameter);
 
                     //Создание корзины, если ее нет
-                    if (await Task.Run(() => _dbContext.Cart.FirstOrDefault(x => x.UserID == _mainWindowViewModel.UserID)) == null)
+                    if (await Task.Run(() => _dbContext.Cart.FirstOrDefault(x => x.UserID == _loginViewModel.UserID)) == null)
                     {
                         await _dbContext.Cart.AddAsync(new Cart()
                         {
-                            UserID = _mainWindowViewModel.UserID
+                            UserID = _loginViewModel.UserID
                         });
 
                         await _dbContext.SaveChangesAsync();
                     }
 
                     //Получение корзины пользователя
-                    Cart CartModel = await Task.Run(() => _dbContext.Cart.FirstOrDefault(x => x.UserID == _mainWindowViewModel.UserID));
+                    Cart CartModel = await Task.Run(() => _dbContext.Cart.FirstOrDefault(x => x.UserID == _loginViewModel.UserID));
 
                     //Получение контейнера еды для корзины пользователя
                     ClothesContain foodContain = await Task.Run(() => _dbContext.ClothesContain.FirstOrDefault(x => x.ClothesID == SelectedClothesModel.ClothesID && x.CartID == CartModel.CartID));
@@ -188,58 +194,35 @@ namespace OptimistShop.ViewModels
             }
         }
 
-
         [RelayCommand]
-        private async void CategoryFilter()
+        private void CategoryFilter()
         {
             try
             {
-                if (SelectedCategory == "Cбросить")
+                if (SelectedCategory != string.Empty && SelectedType != string.Empty)
                 {
                     ProgressRingVisibility = Visibility.Visible;
-                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.ToList()));
+
+                    CatalogItemsSecondary = new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesCategory == SelectedCategory && x.ClothesType == ParseType(SelectedType)).ToList());
+
                     ProgressRingVisibility = Visibility.Hidden;
                 }
-                else
-                {
-                    ProgressRingVisibility = Visibility.Visible;
-                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesCategory == SelectedCategory)));
-                    ProgressRingVisibility = Visibility.Hidden;
-                }
-                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
         }
 
         [RelayCommand]
-        private async void TypeFilter()
+        private async void ClearFillters()
         {
-            try
-            {
-                if (SelectedType == "Сбросить")
-                {
-                    ProgressRingVisibility = Visibility.Visible;
-                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.ToList()));
-                    ProgressRingVisibility = Visibility.Hidden;
-                }
-                else
-                {
-                    ProgressRingVisibility = Visibility.Visible;
-                    CatalogItemsSecondary = await Task.Run(() => new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesType == ParseType(SelectedType))));
-                    ProgressRingVisibility = Visibility.Hidden;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            CatalogItemsSecondary = new ObservableCollection<Clothes>(_dbContext.Clothes.ToList());
+            IndexCategory = -1;
+            IndexType = -1;
         }
+
+        
 
         private string ParseType(string category)
         {

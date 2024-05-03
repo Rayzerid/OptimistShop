@@ -23,8 +23,10 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="470" />
+            <ColumnDefinition Width="170" />
+            <ColumnDefinition Width="170" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <ui:ProgressRing
@@ -34,13 +36,12 @@
             Visibility="{Binding ViewModel.ProgressRingVisibility}" />
 
         <ui:TextBox
-            Width="450"
-            MinWidth="450"
+            MinWidth="440"
             Margin="20,0,0,0"
             HorizontalAlignment="Left"
             Cursor="IBeam"
-            PlaceholderText="Поиск"
             Icon="Search48"
+            PlaceholderText="Поиск"
             Text="{Binding ViewModel.SearchText, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="TextChanged">
@@ -48,39 +49,50 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ui:TextBox>
-        
-        <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <ComboBox
-                Width="220"
-                Margin="5,0,15,0"
-                VerticalAlignment="Center"
-                ItemsSource="{Binding ViewModel.ClothesCategory}"
-                SelectedItem="{Binding ViewModel.SelectedCategory}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding ViewModel.CategoryFilterCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
 
-            <ComboBox Width="220"
-                      VerticalAlignment="Center"
-                      ItemsSource="{Binding ViewModel.ClothesType}"
-                      SelectedItem="{Binding ViewModel.SelectedType}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding ViewModel.TypeFilterCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
-        </StackPanel>
+        <ComboBox
+            Grid.Column="1"
+            Margin="5,0,0,0"
+            SelectedIndex="{Binding ViewModel.IndexCategory}"
+            VerticalAlignment="Center"
+            ItemsSource="{Binding ViewModel.ClothesCategory}"
+            SelectedItem="{Binding ViewModel.SelectedCategory, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ViewModel.CategoryFilterCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+
+        <ComboBox
+            Grid.Column="2"
+            Margin="5,0,0,0"
+            SelectedIndex="{Binding ViewModel.IndexType}"
+            VerticalAlignment="Center"
+            ItemsSource="{Binding ViewModel.ClothesType}"
+            SelectedItem="{Binding ViewModel.SelectedType, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ViewModel.CategoryFilterCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+
+        <ui:Button
+            Grid.Column="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Command="{Binding ViewModel.ClearFilltersCommand}"
+            Content="Сбросить"
+            FontSize="16"
+            Foreground="Gray" />
 
 
 
         <ui:VirtualizingItemsControl
             x:Name="listViewMenu"
             Grid.Row="1"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="5"
             Margin="0,20,0,0"
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             ItemsSource="{Binding ViewModel.CatalogItemsSecondary, UpdateSourceTrigger=PropertyChanged}"
@@ -144,7 +156,7 @@
                                     BorderThickness="1.5"
                                     Click="BtnAddToCart_Click"
                                     Command="{Binding ViewModel.ToCartClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MenuPage}}}"
-                                    CommandParameter="{Binding ClothesName}"
+                                    CommandParameter="{Binding ClothesID}"
                                     Content="Купить"
                                     Cursor="Hand"
                                     FontSize="14"

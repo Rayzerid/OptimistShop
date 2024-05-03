@@ -18,6 +18,7 @@ namespace OptimistShop.ViewModels
     public partial class CartPageViewModel : ObservableObject, INavigationAware
     {
         private MainWindowViewModel? _mainWindowViewModel;
+        private LoginPageViewModel _loginPageViewModel;
         private StoreDbContext _dbContext;
         private INavigationService? navService;
 
@@ -79,6 +80,7 @@ namespace OptimistShop.ViewModels
             try
             {
                 _mainWindowViewModel = App.GetService<MainWindowViewModel>();
+                _loginPageViewModel = App.GetService<LoginPageViewModel>();
 
                 if(_mainWindowViewModel.BadgeValue == 0)
                     InterfaceVisibility = Visibility.Hidden;
@@ -95,7 +97,7 @@ namespace OptimistShop.ViewModels
                     _mainWindowViewModel.IsCartFilled = true;
                     ProductsCount = _mainWindowViewModel.BadgeValue;
 
-                    CartItems = await Task.Run(() => new ObservableCollection<ClothesContain>(_dbContext.ClothesContain.Include(x => x.Clothes).Include(x => x.Cart).Where(x => x.Cart.UserID == _mainWindowViewModel.UserID)));
+                    CartItems = await Task.Run(() => new ObservableCollection<ClothesContain>(_dbContext.ClothesContain.Include(x => x.Clothes).Include(x => x.Cart).Where(x => x.Cart.UserID == _loginPageViewModel.UserID)));
 
                     foreach (ClothesContain item in CartItems)
                         ProductsSummary += item.Count * item.Clothes.ClothesPrice;
@@ -136,7 +138,7 @@ namespace OptimistShop.ViewModels
                     //Создание заказа
                     Order orderObj = new Order
                     {
-                        UserID = _mainWindowViewModel.UserID,
+                        UserID = _loginPageViewModel.UserID,
                         OrderDate = DateTime.Now,
                         OrderStatus = "Подтвержден",
                         OrderTotal = ProductsSummary,

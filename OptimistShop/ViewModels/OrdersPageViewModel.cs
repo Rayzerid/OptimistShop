@@ -19,6 +19,7 @@ namespace OptimistShop.ViewModels
         private INavigationService? navService;
         private StoreDbContext _dbContext;
         private MainWindowViewModel _mainWindowViewModel;
+        private LoginPageViewModel _loginPageViewModel;
         private OrderDetailsPageViewModel _orderDetailsPageViewModel;
 
         [ObservableProperty]
@@ -39,12 +40,13 @@ namespace OptimistShop.ViewModels
                 ProgressRingVisibility = Visibility.Visible;
 
                 _mainWindowViewModel = App.GetService<MainWindowViewModel>();
+                _loginPageViewModel = App.GetService<LoginPageViewModel>();
                 _dbContext = await Task.Run(() => new StoreDbContext());
 
-                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _mainWindowViewModel.UserID && x.OrderStatus == "Готов к выдаче")));
-                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _mainWindowViewModel.UserID && x.OrderStatus == "Готовится"))));
-                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _mainWindowViewModel.UserID && x.OrderStatus == "Подтвержден"))));
-                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _mainWindowViewModel.UserID && x.OrderStatus == "Получен"))));
+                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Готов к выдаче")));
+                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Готовится"))));
+                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Подтвержден"))));
+                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Получен"))));
 
                 if (OrderItems.Count == 0)
                 {
