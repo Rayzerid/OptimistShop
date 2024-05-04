@@ -18,11 +18,12 @@
     <ui:UiPage.Resources>
         <cnvs:BoolToStringConverter
             x:Key="BooleanToStringConverter"
-            FalseValue="Нет"
-            TrueValue="Да" />
+            FalseValue="Не оплачен"
+            TrueValue="Оплачен" />
         <cnvs:StringToValueConverter x:Key="StringToValueConverter" />
         <cnvs:ProgressBarValueToBackgroundConverter x:Key="ProgressBarValueToBackgroundConverter" />
         <cnvs:ProgressBarValueToForegroundConverter x:Key="ProgressBarValueToForegroundConverter" />
+        <cnvs:AddWeekConverter x:Key="AddWeekConverter" />
     </ui:UiPage.Resources>
     <Grid>
         <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding ViewModel.ProgressRingVisibility}" />
@@ -36,32 +37,52 @@
                 <DataTemplate>
                     <Border BorderBrush="LightGray" BorderThickness="1">
                         <StackPanel>
-                            <Grid Height="40" Background="#188851">
-                                <TextBlock
-                                    Margin="15,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="White"
-                                    Text="{Binding OrderID, StringFormat=Заказ #{0}}" />
-                                <ui:Button
-                                    Margin="0,0,15,0"
+                            <Grid Height="50" Background="Black">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        Margin="15,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="Black"
+                                        Foreground="White">
+                                        <Run Text="Заказ от: " />
+                                        <Run Text="{Binding OrderDate, StringFormat=dd.MM.yyyy}" />
+                                    </TextBlock>
+                                    <TextBlock
+                                        Margin="15,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="Black"
+                                        Foreground="White"
+                                        Text="{Binding OrderID, StringFormat=№ {0}}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Column="1"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Command="{Binding ViewModel.ShowDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:OrdersPage}}}"
-                                    CommandParameter="{Binding OrderID}"
-                                    Content="Показать детали заказа"
-                                    Cursor="Hand"
-                                    FontSize="14"
-                                    FontWeight="SemiBold"
-                                    Foreground="White"
-                                    MouseOverBackground="Transparent"
-                                    MouseOverBorderBrush="Transparent"
-                                    PressedBackground="Transparent"
-                                    PressedBorderBrush="Transparent"
-                                    PressedForeground="LightGray" />
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,15,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Foreground="White"
+                                        Text="{Binding IsPaid, Converter={StaticResource BooleanToStringConverter}}" />
+                                    <TextBlock
+                                        Margin="0,0,15,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="Black"
+                                        Foreground="White"
+                                        Text="{Binding OrderTotal, StringFormat={}{0} ₽}" />
+                                </StackPanel>
                             </Grid>
                             <Grid Height="80" Background="#ededed">
                                 <Grid.RowDefinitions>
@@ -77,175 +98,48 @@
                                 <TextBlock
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Margin="40,0,0,0"
+                                    Margin="15,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    FontSize="16">
-                                    <Run Text="Оплачен: " />
-                                    <Run FontWeight="SemiBold" Text="{Binding IsPaid, Converter={StaticResource BooleanToStringConverter}}" />
-                                </TextBlock>
-
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Margin="40,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="16">
-                                    <Run Text="Статус: " />
-                                    <Run FontWeight="SemiBold" Text="{Binding OrderStatus}" />
-                                </TextBlock>
-
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Margin="40,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="16">
-                                    <Run Text="Дата заказа: " />
-                                    <Run FontWeight="SemiBold" Text="{Binding OrderDate, StringFormat=dd.MM.yyyy}" />
-                                </TextBlock>
-
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Margin="40,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="16">
-                                    <Run Text="Сумма заказа: " />
-                                    <Run FontWeight="SemiBold" Text="{Binding OrderTotal, StringFormat={}{0} ₽}" />
-                                </TextBlock>
-
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="40,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="16">
+                                    FontSize="16"
+                                    FontWeight="Bold">
                                     <Run Text="Способ оплаты: " />
                                     <Run FontWeight="SemiBold" Text="{Binding PaymentMethod}" />
                                 </TextBlock>
-                            </Grid>
-                            <Grid Height="140">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <ProgressBar
-                                    x:Name="ProgressBar"
-                                    Grid.ColumnSpan="5"
-                                    Height="6"
-                                    Margin="140,0,140,25"
-                                    VerticalAlignment="Center"
-                                    Background="#ededed"
-                                    BorderBrush="Transparent"
-                                    Foreground="#188851"
-                                    Value="{Binding OrderStatus, Converter={StaticResource StringToValueConverter}}" />
 
-                                <StackPanel
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                    <Border
-                                        Width="70"
-                                        Height="70"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToBackgroundConverter}, ConverterParameter=Confirm}"
-                                        CornerRadius="100">
-                                        <ui:SymbolIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="40"
-                                            Foreground="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToForegroundConverter}, ConverterParameter=Confirm}"
-                                            Symbol="Food16" />
-                                    </Border>
-                                    <TextBlock
-                                        Margin="0,10,0,0"
-                                        HorizontalAlignment="Center"
-                                        Foreground="DarkSlateGray"
-                                        Text="Подтвержден" />
-                                </StackPanel>
-
-                                <StackPanel
+                                <Border
+                                    Grid.Row="0"
                                     Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                    <Border
-                                        Width="70"
-                                        Height="70"
+                                    Width="130"
+                                    Height="25"
+                                    CornerRadius="10"
+                                    Margin="15,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Background="Gray">
+                                    <TextBlock
+                                        FontSize="16"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Background="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToBackgroundConverter}, ConverterParameter=Cooking}"
-                                        CornerRadius="100">
-                                        <ui:SymbolIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="40"
-                                            Foreground="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToForegroundConverter}, ConverterParameter=Cooking}"
-                                            Symbol="Gauge20" />
-                                    </Border>
-                                    <TextBlock
-                                        Margin="0,10,0,0"
-                                        HorizontalAlignment="Center"
-                                        Foreground="DarkSlateGray"
-                                        Text="Готовится" />
-                                </StackPanel>
+                                        Foreground="White"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding OrderStatus}" />
+                                </Border>
 
-                                <StackPanel
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                    <Border
-                                        Width="70"
-                                        Height="70"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToBackgroundConverter}, ConverterParameter=Ready}"
-                                        CornerRadius="100">
-                                        <ui:SymbolIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="40"
-                                            Foreground="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToForegroundConverter}, ConverterParameter=Ready}"
-                                            Symbol="Receipt20" />
-                                    </Border>
-                                    <TextBlock
-                                        Margin="0,10,0,0"
-                                        HorizontalAlignment="Center"
-                                        Foreground="DarkSlateGray"
-                                        Text="Готов к выдаче" />
-                                </StackPanel>
-
-                                <StackPanel
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                    <Border
-                                        Width="70"
-                                        Height="70"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToBackgroundConverter}, ConverterParameter=Got}"
-                                        CornerRadius="100">
-                                        <ui:SymbolIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="40"
-                                            Foreground="{Binding ElementName=ProgressBar, Path=Value, Converter={StaticResource ProgressBarValueToForegroundConverter}, ConverterParameter=Got}"
-                                            Symbol="Checkmark12" />
-                                    </Border>
-                                    <TextBlock
-                                        Margin="0,10,0,0"
-                                        HorizontalAlignment="Center"
-                                        Foreground="DarkSlateGray"
-                                        Text="Получен" />
-                                </StackPanel>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Margin="15,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="16">
+                                    <Run FontWeight="Bold" Text="Дата доставки: " />
+                                    <Run FontWeight="SemiBold" Text="{Binding OrderDate, Converter={StaticResource AddWeekConverter}}" />
+                                </TextBlock>
+                                
+                                <Image Source="{Binding }">
+                                    
+                                </Image>
                             </Grid>
                         </StackPanel>
                     </Border>
