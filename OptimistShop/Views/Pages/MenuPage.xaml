@@ -172,8 +172,8 @@
 
         <ui:Snackbar
             x:Name="AddSnackbar"
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="4"
             Appearance="{Binding ViewModel.SnackbarAppearance}"
             FontSize="15"
             Icon="Info28"

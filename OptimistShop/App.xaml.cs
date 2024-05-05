@@ -65,12 +65,6 @@ namespace OptimistShop
                 services.AddScoped<Views.Pages.RegistrationPage>();
                 services.AddScoped<ViewModels.RegistrationPageViewModel>();
 
-                services.AddScoped<Views.Pages.CardDataPage>();
-                services.AddScoped<ViewModels.CardDataPageViewModel>();
-
-                services.AddScoped<Views.Pages.OrderDetailsPage>();
-                services.AddScoped<ViewModels.OrderDetailsPageViewModel>();
-
                 services.AddScoped<Views.Pages.EmployeePage>();
                 services.AddScoped<ViewModels.EmployeePageViewModel>();
 

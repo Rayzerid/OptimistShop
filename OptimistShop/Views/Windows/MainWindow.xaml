@@ -53,7 +53,7 @@
                     Command="{Binding ViewModel.OpenCartCommand}"
                     Cursor="Hand"
                     FontSize="34"
-                    Icon="Cart16"
+                    Icon="Cart24"
                     IconFilled="{Binding ViewModel.IsCartFilled}"
                     ToolTip="Корзина"
                     ToolTipService.InitialShowDelay="1"
@@ -62,10 +62,10 @@
                     Width="auto"
                     Height="auto"
                     Margin="0,2,10,0"
-                    Padding="2"
+                    Padding="3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Appearance="Danger"
+                    Appearance="Dark"
                     Visibility="{Binding ViewModel.BadgeVisibility}">
                     <TextBlock
                         HorizontalAlignment="Center"
@@ -92,7 +92,7 @@
                     ToolTipService.InitialShowDelay="1"
                     Visibility="{Binding ViewModel.IsLoginBtnVisible}">
                     <ui:SymbolIcon
-                        Margin="0,3,0,0"
+                        Margin="0,0,0,0"
                         Filled="{Binding ViewModel.IsLoginFilled}"
                         FontSize="32"
                         Symbol="Person16" />
@@ -108,7 +108,7 @@
                     <ui:SymbolIcon
                         Margin="0,3,0,0"
                         FontSize="32"
-                        Symbol="ArrowExit20" />
+                        Symbol="DoorArrowRight16" />
                 </ui:Button>
             </Grid>
         </StackPanel>

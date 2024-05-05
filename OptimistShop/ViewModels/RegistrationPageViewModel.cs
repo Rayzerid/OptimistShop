@@ -70,7 +70,7 @@ namespace OptimistShop.ViewModels
                         UserName = UserName,
                         UserPassword = UserPassword,
                         UserMail = UserMail,
-                        RoleID = 2,
+                        RoleID = 1,
                         UserBirthday = UserBirthday
                     });
 

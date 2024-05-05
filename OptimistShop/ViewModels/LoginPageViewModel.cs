@@ -98,15 +98,10 @@ namespace OptimistShop.ViewModels
                             navService.Navigate(typeof(Views.Pages.HomePage));
                             break;
                         case 2:
-                            
-
-                            break;
-
-                        /* case 3:
-                            NavigationItems.Clear();
+                            _mainWindowViewModel.NavigationItems.Clear();
 
                             UserID = userModel.UserID;
-                            IsUserAuthorized = true;
+                            _mainWindowViewModel.IsUserAuthorized = true;
 
                             SnackbarMessage = "Успешный вход!";
                             snackbar.Appearance = ControlAppearance.Success;
@@ -115,9 +110,9 @@ namespace OptimistShop.ViewModels
                             navService = App.GetService<INavigationService>();
                             navService.Navigate(typeof(Views.Pages.EmployeePage));
 
-                            ProgressRingVisibility = Visibility.Hidden;
-                            LoginGridVisibility = Visibility.Hidden;
-                            break;*/
+                            _mainWindowViewModel.ProgressRingVisibility = Visibility.Hidden;
+
+                            break;
                     }
                 }
                 else

@@ -125,57 +125,49 @@ namespace OptimistShop.ViewModels
         private async void Checkout(Snackbar snackbar)
         {
             SnackBar = snackbar;
-
-            if (PayNowCheckBoxIsChecked && CardMethodIsChecked)
+            try
             {
-                navService = App.GetService<INavigationService>();
-                navService.Navigate(typeof(Views.Pages.CardDataPage));
-            }
-            else
-            {
-                try
+                //Создание заказа
+                Order orderObj = new Order
                 {
-                    //Создание заказа
-                    Order orderObj = new Order
+                    UserID = _loginPageViewModel.UserID,
+                    OrderDate = DateTime.Now,
+                    OrderStatus = "Подтвержден",
+                    OrderTotal = ProductsSummary,
+                    IsPaid = false,
+                    PaymentMethod = CardMethodIsChecked ? "Карта" : "Наличные"
+                };
+                await _dbContext.Order.AddAsync(orderObj);
+                await _dbContext.SaveChangesAsync();
+
+                int OrderObjID = orderObj.OrderID;
+
+                //Добавление товаров из корзины в контейнер заказа и очистка корзины
+                foreach (ClothesContain item in CartItems)
+                {
+                    await _dbContext.OrderContain.AddAsync(new OrderContain()
                     {
-                        UserID = _loginPageViewModel.UserID,
-                        OrderDate = DateTime.Now,
-                        OrderStatus = "Подтвержден",
-                        OrderTotal = ProductsSummary,
-                        IsPaid = false,
-                        PaymentMethod = CardMethodIsChecked ? "Карта" : "Наличные"
-                    };
-                    await _dbContext.Order.AddAsync(orderObj);
-                    await _dbContext.SaveChangesAsync();
-
-                    int OrderObjID = orderObj.OrderID;
-
-                    //Добавление товаров из корзины в контейнер заказа и очистка корзины
-                    foreach (ClothesContain item in CartItems)
-                    {
-                        await _dbContext.OrderContain.AddAsync(new OrderContain()
-                        {
-                            OrderID = OrderObjID,
-                            ClothesID = item.ClothesID,
-                            Count = item.Count
-                        });
-                    }
-
-                    //Удаление элементов корзины
-                    await Task.Run(() => _dbContext.ClothesContain.RemoveRange(CartItems));
-                    await _dbContext.SaveChangesAsync();
-
-                    _mainWindowViewModel.BadgeValue = 0;
-                    InitializeViewModel();
-
-                    SnackBar.Show();
+                        OrderID = OrderObjID,
+                        ClothesID = item.ClothesID,
+                        Count = item.Count
+                    });
                 }
-                catch (Exception ex)
-                {
-                    System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }     
+
+                //Удаление элементов корзины
+                await Task.Run(() => _dbContext.ClothesContain.RemoveRange(CartItems));
+                await _dbContext.SaveChangesAsync();
+
+                _mainWindowViewModel.BadgeValue = 0;
+                InitializeViewModel();
+
+                SnackBar.Show();
             }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }     
+            
         }
 
         [RelayCommand]

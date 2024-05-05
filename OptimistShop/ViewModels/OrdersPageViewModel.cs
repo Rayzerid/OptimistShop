@@ -20,7 +20,7 @@ namespace OptimistShop.ViewModels
         private StoreDbContext _dbContext;
         private MainWindowViewModel _mainWindowViewModel;
         private LoginPageViewModel _loginPageViewModel;
-        private OrderDetailsPageViewModel _orderDetailsPageViewModel;
+
 
         [ObservableProperty]
         private ObservableCollection<Order> _orderItems;
@@ -43,8 +43,8 @@ namespace OptimistShop.ViewModels
                 _loginPageViewModel = App.GetService<LoginPageViewModel>();
                 _dbContext = await Task.Run(() => new StoreDbContext());
 
-                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Готов к выдаче")));
-                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Готовится"))));
+                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "В пункте выдачи")));
+                OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "В пути"))));
                 OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Подтвержден"))));
                 OrderItems.InsertRange(await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.OrderContain).Where(x => x.UserID == _loginPageViewModel.UserID && x.OrderStatus == "Получен"))));
 
@@ -66,15 +66,6 @@ namespace OptimistShop.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void ShowDetails(int OrderId)
-        {
-            navService = App.GetService<INavigationService>();
-            navService.Navigate(typeof(Views.Pages.OrderDetailsPage));
-
-            _orderDetailsPageViewModel = App.GetService<OrderDetailsPageViewModel>();
-            _orderDetailsPageViewModel.OrderID = OrderId;
-        }
 
         [RelayCommand]
         private void GoToMenu()

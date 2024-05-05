@@ -25,7 +25,7 @@ namespace OptimistShop.ViewModels
         private string _userIDText = string.Empty;
 
         [ObservableProperty]
-        private string _emptyText = "Заказов пока что нет";
+        private string _emptyText = "У вас нет заказов";
 
         [ObservableProperty]
         private ObservableCollection<Order> _orderItems;
@@ -54,7 +54,7 @@ namespace OptimistShop.ViewModels
 
                 if (OrderItems.Count == 0)
                 {
-                    EmptyText = "Заказов пока что нет";
+                    EmptyText = "У вас нет заказов";
                     EmptyOrderVisibility = Visibility.Visible;
                 }
                 else
@@ -85,7 +85,7 @@ namespace OptimistShop.ViewModels
 
                 Order orderModel = await Task.Run(() => _dbContext.Order.FirstOrDefault(x => x.OrderID == OrderID));
 
-                if (value == "Нет")
+                if (value == "Не оплачен")
                     orderModel.IsPaid = false;
                 else
                     orderModel.IsPaid = true;
@@ -134,59 +134,7 @@ namespace OptimistShop.ViewModels
             
         }
 
-        [RelayCommand]
-        private async void GetAllOrders()
-        {
-            try
-            {
-                ProgressRingVisibility = Visibility.Visible;
 
-                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.User).Where(x => x.OrderStatus != "Получен")));
-
-                if (OrderItems.Count == 0)
-                {
-                    EmptyText = "Заказов пока что нет";
-                    EmptyOrderVisibility = Visibility.Visible;
-                }
-                else
-                    EmptyOrderVisibility = Visibility.Hidden;
-
-                ProgressRingVisibility = Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            
-        }
-
-        [RelayCommand]
-        private async void GetTodayOrders()
-        {
-            try
-            {
-                ProgressRingVisibility = Visibility.Visible;
-
-                OrderItems = await Task.Run(() => new ObservableCollection<Order>(_dbContext.Order.Include(x => x.User).Where(x => x.OrderStatus != "Получен" && x.OrderDate == DateTime.Today)));
-
-                if (OrderItems.Count == 0)
-                {
-                    EmptyText = "Сегодня пока нет заказов";
-                    EmptyOrderVisibility = Visibility.Visible;
-                }
-                else
-                    EmptyOrderVisibility = Visibility.Hidden;
-
-                ProgressRingVisibility = Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            
-        }
 
         [RelayCommand]
         private async void IDTextChanged()

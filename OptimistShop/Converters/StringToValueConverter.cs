@@ -10,9 +10,9 @@ namespace OptimistShop.Converters
         {
             if ((string)value == "Подтвержден")
                 return 13;
-            if ((string)value == "Готовится")
+            if ((string)value == "В пути")
                 return 50;
-            if ((string)value == "Готов к выдаче")
+            if ((string)value == "В пункте выдачи")
                 return 87;
             if ((string)value == "Получен")
                 return 100;
@@ -25,9 +25,9 @@ namespace OptimistShop.Converters
             if ((int)value == 13)
                 return "Подтвержден";
             if ((int)value == 50)
-                return "Готовится";
+                return "В пути";
             if ((int)value == 87)
-                return "Готов к выдаче";
+                return "В пункте выдачи";
             if ((int)value == 100)
                 return "Получен";
             else

@@ -92,7 +92,7 @@ namespace OptimistShop.ViewModels
                     {
                         Content = "Главная",
                         PageTag = "home",
-                        Icon = SymbolRegular.Home20,
+                        Icon = SymbolRegular.Home12,
                         PageType = typeof(Views.Pages.HomePage),
                         ToolTip = "Главная",
                         IconForeground = Brushes.Black,
@@ -144,7 +144,7 @@ namespace OptimistShop.ViewModels
                 {
                     Content = "Главная",
                     PageTag = "home",
-                    Icon = SymbolRegular.Home20,
+                    Icon = SymbolRegular.Home12,
                     PageType = typeof(Views.Pages.HomePage),
                     ToolTip = "Главная",
                     IconForeground = Brushes.Black,

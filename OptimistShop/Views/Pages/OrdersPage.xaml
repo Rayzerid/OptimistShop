@@ -21,8 +21,6 @@
             FalseValue="Не оплачен"
             TrueValue="Оплачен" />
         <cnvs:StringToValueConverter x:Key="StringToValueConverter" />
-        <cnvs:ProgressBarValueToBackgroundConverter x:Key="ProgressBarValueToBackgroundConverter" />
-        <cnvs:ProgressBarValueToForegroundConverter x:Key="ProgressBarValueToForegroundConverter" />
         <cnvs:AddWeekConverter x:Key="AddWeekConverter" />
     </ui:UiPage.Resources>
     <Grid>
