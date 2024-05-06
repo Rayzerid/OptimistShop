@@ -33,12 +33,6 @@ namespace OptimistShop.ViewModels
         private string? _searchText;
 
         [ObservableProperty]
-        private int _indexCategory;
-
-        [ObservableProperty]
-        private int _indexType;
-
-        [ObservableProperty]
         private string _selectedCategory;
 
         [ObservableProperty]
@@ -199,11 +193,6 @@ namespace OptimistShop.ViewModels
 
         [RelayCommand]
         private void CategoryFilter()
-        {
-            UpdateListView();
-        }
-
-        private void UpdateListView()
         {
             // Применение фильтров по выбранным категориям и полу
             var filteredItems = new ObservableCollection<Clothes>(_dbContext.Clothes.ToList());

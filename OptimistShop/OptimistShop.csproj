@@ -34,7 +34,6 @@
     <None Remove="Assets\applicationIcon-256.png" />
     <None Remove="Assets\backgroundhome.png" />
     <None Remove="Assets\login.png" />
-    <None Remove="Assets\pay-card.png" />
     <None Remove="Assets\registration.png" />
   </ItemGroup>
 
@@ -47,7 +46,6 @@
     <Resource Include="Assets\applicationIcon-256.png" />
     <Resource Include="Assets\backgroundhome.png" />
     <Resource Include="Assets\login.png" />
-    <Resource Include="Assets\pay-card.png" />
     <Resource Include="Assets\registration.png" />
   </ItemGroup>
 
