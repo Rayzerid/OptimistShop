@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Wpf.Ui.Common.Interfaces;
 
 namespace OptimistShop.ViewModels
@@ -84,14 +85,16 @@ namespace OptimistShop.ViewModels
 
                 ClothesCategory = new ObservableCollection<string>()
                 {
+                    "Вся одежда",
                     "Верхняя одежда",
-                    "Нижняя одежда",
+                    "Брюки",
                     "Обувь",
                     "Головные уборы"
                 };
 
                 ClothesType = new ObservableCollection<string>()
                 {
+                    "Любой",
                     "Мужская",
                     "Женская"
                 };
@@ -197,32 +200,35 @@ namespace OptimistShop.ViewModels
         [RelayCommand]
         private void CategoryFilter()
         {
-            try
-            {
-                if (SelectedCategory != string.Empty && SelectedType != string.Empty)
-                {
-                    ProgressRingVisibility = Visibility.Visible;
+            UpdateListView();
+        }
 
-                    CatalogItemsSecondary = new ObservableCollection<Clothes>(_dbContext.Clothes.Where(x => x.ClothesCategory == SelectedCategory && x.ClothesType == ParseType(SelectedType)).ToList());
+        private void UpdateListView()
+        {
+            // Применение фильтров по выбранным категориям и полу
+            var filteredItems = new ObservableCollection<Clothes>(_dbContext.Clothes.ToList());
 
-                    ProgressRingVisibility = Visibility.Hidden;
-                }
-            }
-            catch (Exception ex)
+            if (SelectedCategory != null && SelectedCategory != "Вся одежда")
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string selectedCategory = SelectedCategory;
+                filteredItems = new ObservableCollection<Clothes>(filteredItems.Where(item => item.ClothesCategory == selectedCategory).ToList());
             }
+            if (SelectedType != null && SelectedType != "Любой")
+            {
+                string selectedGender = SelectedType;
+                filteredItems = new ObservableCollection<Clothes>(filteredItems.Where(item => item.ClothesType == ParseType(selectedGender)).ToList());
+            }
+
+            // Обновление ListView с отфильтрованными элементами
+            CatalogItemsSecondary = filteredItems;
         }
 
         [RelayCommand]
-        private async void ClearFillters()
+        private void ClearFilter()
         {
-            CatalogItemsSecondary = new ObservableCollection<Clothes>(_dbContext.Clothes.ToList());
-            IndexCategory = -1;
-            IndexType = -1;
+            SelectedType = "Любой";
+            SelectedCategory = "Вся одежда";
         }
-
-        
 
         private string ParseType(string category)
         {
