@@ -106,21 +106,21 @@
                                 </TextBlock>
 
                                 <Border
-                                    Grid.Row="0"
-                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+Grid.Column="2"
                                     Width="130"
                                     Height="25"
-                                    CornerRadius="10"
                                     Margin="15,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="Gray">
+                                    Background="Gray"
+                                    CornerRadius="10">
                                     <TextBlock
-                                        FontSize="16"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Foreground="White"
+                                        FontSize="16"
                                         FontWeight="SemiBold"
+                                        Foreground="White"
                                         Text="{Binding OrderStatus}" />
                                 </Border>
 
@@ -134,10 +134,20 @@
                                     <Run FontWeight="Bold" Text="Дата доставки: " />
                                     <Run FontWeight="SemiBold" Text="{Binding OrderDate, Converter={StaticResource AddWeekConverter}}" />
                                 </TextBlock>
-                                
-                                <Image Source="{Binding }">
-                                    
-                                </Image>
+
+                                <TextBlock
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    MaxWidth="260"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    TextWrapping="Wrap">
+                                    <Run FontWeight="Bold" Text="Адрес доствки: " />
+                                    <Run FontWeight="SemiBold" Text="{Binding OrderDescription}" />
+                                </TextBlock>
                             </Grid>
                         </StackPanel>
                     </Border>

@@ -46,6 +46,10 @@ namespace OptimistShop.ViewModels
         private int _productsSummary;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CheckoutCommand))]
+        private string _orderDescription;
+
+        [ObservableProperty]
         private bool _buttonsCountIsEnabled = true;
 
         [ObservableProperty]
@@ -121,7 +125,7 @@ namespace OptimistShop.ViewModels
             navService.Navigate(typeof(Views.Pages.MenuPage));
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CheckFields))]
         private async void Checkout(Snackbar snackbar)
         {
             SnackBar = snackbar;
@@ -135,7 +139,8 @@ namespace OptimistShop.ViewModels
                     OrderStatus = "Подтвержден",
                     OrderTotal = ProductsSummary,
                     IsPaid = false,
-                    PaymentMethod = CardMethodIsChecked ? "Карта" : "Наличные"
+                    PaymentMethod = CardMethodIsChecked ? "Карта" : "Наличные",
+                    OrderDescription = OrderDescription
                 };
                 await _dbContext.Order.AddAsync(orderObj);
                 await _dbContext.SaveChangesAsync();
@@ -285,6 +290,11 @@ namespace OptimistShop.ViewModels
                         break;
                 }
             }
+        }
+
+        private bool CheckFields()
+        {
+            return !(OrderDescription == null || OrderDescription.Trim().Length < 10);
         }
     }
 }

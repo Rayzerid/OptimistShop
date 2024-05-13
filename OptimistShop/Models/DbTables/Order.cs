@@ -19,6 +19,7 @@ namespace OptimistShop.Models.DbTables
         public int OrderTotal { get; set; }
         public bool IsPaid { get; set; }
         public string PaymentMethod { get; set; }
+        public string OrderDescription { get; set; }
 
         //OrderContain Relationship
         public ICollection<OrderContain>? OrderContain { get; set; }

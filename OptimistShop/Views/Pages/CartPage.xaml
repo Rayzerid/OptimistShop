@@ -181,6 +181,7 @@
                         Margin="10 0 10 0"
                         MinHeight="90"
                         TextWrapping="Wrap"
+                        Text="{Binding ViewModel.OrderDescription, UpdateSourceTrigger=PropertyChanged}"
                         BorderBrush="Gray"
                         MaxLength="50"
                         FontWeight="DemiBold"

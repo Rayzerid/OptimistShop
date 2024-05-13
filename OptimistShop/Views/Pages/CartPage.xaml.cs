@@ -30,5 +30,10 @@ namespace OptimistShop.Views.Pages
             ViewModel = viewModel;
             InitializeComponent();
         }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+        }
     }
 }
