@@ -37,6 +37,9 @@ namespace OptimistShop.ViewModels
         private string _emailUser = string.Empty;
 
         [ObservableProperty]
+        private bool _btnLoginVis = true;
+
+        [ObservableProperty]
         private string _userPassword = string.Empty;
 
         [ObservableProperty]
@@ -57,6 +60,7 @@ namespace OptimistShop.ViewModels
         {
             try
             {
+                BtnLoginVis = false;
                 _mainWindowViewModel = App.GetService<MainWindowViewModel>();
                 _homePageViewModel = App.GetService<HomePageViewModel>();
 
@@ -96,6 +100,7 @@ namespace OptimistShop.ViewModels
 
                             _homePageViewModel.TextButton = "Каталог";
                             navService.Navigate(typeof(Views.Pages.HomePage));
+                            BtnLoginVis = true;
                             break;
                         case 2:
                             _mainWindowViewModel.NavigationItems.Clear();
@@ -111,7 +116,7 @@ namespace OptimistShop.ViewModels
                             navService.Navigate(typeof(Views.Pages.EmployeePage));
 
                             _mainWindowViewModel.ProgressRingVisibility = Visibility.Hidden;
-
+                            BtnLoginVis = true;
                             break;
                     }
                 }
@@ -120,13 +125,14 @@ namespace OptimistShop.ViewModels
                     snackbar.Appearance = ControlAppearance.Dark;
                     SnackbarMessage = "Неверный логин или пароль!";
                     snackbar.ShowAsync();
+                    BtnLoginVis = true;
                     return;
                 }
-
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                BtnLoginVis = true;
                 return;
             }
         }

@@ -50,6 +50,7 @@
                 PasswordChanged="PasswordPB_PasswordChanged"
                 PlaceholderText="Введите пароль" />
             <ui:Button
+                IsHitTestVisible="{Binding ViewModel.BtnLoginVis}"
                 Width="300"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
