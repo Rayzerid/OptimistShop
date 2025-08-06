@@ -10,7 +10,7 @@ namespace OptimistShop.Core
             try
             {
                 //host
-                optionsBuilder.UseSqlServer(@$"Server=217.28.223.127,17160;User Id=user_5d0ce;Password=Xy6=i$F92w?T;Database=db_e828a;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer(@$"Server=;User Id=;Password=;Database=;TrustServerCertificate=True");
             }
             catch
             {
